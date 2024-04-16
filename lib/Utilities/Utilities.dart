@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 import 'dart:io' as io;
 import 'package:flutter/services.dart';
+import 'package:platform_device_id_v3/platform_device_id.dart';
 
 class Utilities {
   static void showSnackbar(String title, String message) {
@@ -27,8 +28,8 @@ class Utilities {
   static Future<String?> getDeviceID() async {
     String? deviceId;
     try {
-      //deviceId = await PlatformDeviceId.getDeviceId;
-      deviceId = '3867527f8fd434dl';
+      deviceId = await PlatformDeviceId.getDeviceId;
+      // deviceId = '3867527f8fd434dl';
     } on PlatformException {
       deviceId = '';
       Utilities.showSnackbar(

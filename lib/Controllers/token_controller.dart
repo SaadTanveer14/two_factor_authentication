@@ -15,7 +15,7 @@ class TokenController with ChangeNotifier{
   String _userToken = '- - - -';
   String get userToken => _userToken;
   bool get isLoading => _isLoading;
-  bool _requestStatus = false;
+  bool _requestStatus = true;
   bool get requestStatus => _requestStatus;
 
   void resetUserToken() {

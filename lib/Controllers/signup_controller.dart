@@ -18,6 +18,7 @@ class SignUpController with ChangeNotifier{
     _isLoading = true;
 
     Service().sigUp(userid, password, device_id, fullname, mobNo).then((response){
+      print("Sign up $response");
       if(response is SuccessResponse){
         _isLoading = false;
         notifyListeners();

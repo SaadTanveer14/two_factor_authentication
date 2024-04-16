@@ -11,6 +11,7 @@ import '../Service/Service.dart';
 import '../Utilities/Storage.dart';
 import '../Utilities/Utilities.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class BackupCodeController with ChangeNotifier{
   bool _isLoading = false;
@@ -67,27 +68,38 @@ class BackupCodeController with ChangeNotifier{
 
 
   Future<void> generateAndDownloadPDF(List<CodeList> list) async {
-    final pdf = pw.Document();
-
-    pdf.addPage(
-      pw.Page(
-        build: (pw.Context context) {
-          return pw.Column(
-            children: list.map((item) {
-              return pw.Text('${item.code}');
-            }).toList(),
+    
+    try{
+        if (await Permission.manageExternalStorage.request().isGranted)   
+        {
+            final pdf = pw.Document();
+          pdf.addPage(
+            pw.Page(
+              build: (pw.Context context) {
+                return pw.Column(
+                  children: list.map((item) {
+                    return pw.Text('${item.code}');
+                  }).toList(),
+                );
+              },
+            ),
           );
-        },
-      ),
-    );
 
-    final output = await getApplicationDocumentsDirectory();
-    final file = File('${output.path}/BackUpCodes.pdf');
-    await file.writeAsBytes(await pdf.save());
+          final output = await getApplicationDocumentsDirectory();
+          final file = File('${output.path}/BackUpCodes.pdf');
+          await file.writeAsBytes(await pdf.save());
 
-    // Open the generated PDF file
-    Utilities.normalMessage("The BackUp Two factors code is saved in Documents");
-    OpenFile.open(file.path);
+          // Open the generated PDF file
+          Utilities.normalMessage("The BackUp Two factors code is saved in Documents");
+          OpenFile.open(file.path);
+        }
+    }
+    catch(e){
+       Utilities.normalMessage(e.toString());
+    }
+  
+
+  
   }
 
 

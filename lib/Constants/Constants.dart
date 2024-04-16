@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 class Constants{
-  static const String Version = '1.4';
+  static const String Version = '2';
   static const String SUCCESS = 'success';
   static const String ERROR = 'error';
   //Colors

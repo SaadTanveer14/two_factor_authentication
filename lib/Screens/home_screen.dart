@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dropdown_model_list/drop_down/model.dart';
 import 'package:dropdown_model_list/drop_down/select_drop_list.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,10 +13,10 @@ import 'package:towfactor_ios/Controllers/token_controller.dart';
 import 'package:towfactor_ios/Models/Error_response.dart';
 import 'package:towfactor_ios/Models/data_model.dart';
 import 'package:towfactor_ios/Screens/LoginScreen.dart';
+import 'package:towfactor_ios/Screens/no_internet.dart';
 import 'package:towfactor_ios/Service/Service.dart';
 import 'package:towfactor_ios/Utilities/Storage.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
-
 import '../Utilities/Utilities.dart';
 import '../Widgets/expandable_floating_button.dart';
 import '../main.dart';
@@ -37,7 +37,6 @@ class _HomeSreenState extends State<HomeSreen> {
   String? deviceId = 'device_id';
   bool isLoading = true;
   bool shimmerEnabled = true;
-
   DropListModel dropListModel = new DropListModel([]);
   OptionItem optionItemSelected = OptionItem(title: "Select User");
 
@@ -57,14 +56,14 @@ class _HomeSreenState extends State<HomeSreen> {
   Widget build(BuildContext context) {
     final backUpCodeProvider = Provider.of<BackupCodeController>(context);
     return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: onRefresh,
-        child: ListView(
-          children: [
-            Container(
-              color: Colors.transparent,
-              height: MediaQuery.of(context).size.height * 0.40,
-              width: MediaQuery.of(context).size.width,
+          body: RefreshIndicator(
+            onRefresh: onRefresh,
+            child: ListView(
+              children: [
+                Container(
+                  color: Colors.transparent,
+                  height: MediaQuery.of(context).size.height * 0.40,
+                  width: MediaQuery.of(context).size.width,
               child: Stack(
                 children: [
                   Positioned(
@@ -128,7 +127,7 @@ class _HomeSreenState extends State<HomeSreen> {
             Consumer<TokenController>(builder: (context,provider,child){
               return Column(
                 children: [
-                  isLoading ? buildEffect(context,provider) :dropDown(provider, context),
+                  isLoading ? buildEffect(context,provider) : dropDown(provider, context),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Container(
@@ -229,21 +228,22 @@ class _HomeSreenState extends State<HomeSreen> {
             },),
         
           ],
+        )
+    ),
+
+    floatingActionButton: ExpandableFloatingButton(
+      distance: 50.0,
+      children: [
+        ActionButton(
+          onPressed: () {
+            print('ABC');
+            backUpCodeProvider.getBackupCodes("ntest", sessionToken!, deviceId!);
+          } ,
+          icon: const Icon(Icons.security_rounded,color: Colors.blue,),
         ),
-      ),
-      floatingActionButton: ExpandableFloatingButton(
-        distance: 50.0,
-        children: [
-          ActionButton(
-            onPressed: () {
-              print('ABC');
-              backUpCodeProvider.getBackupCodes("ntest", sessionToken!, deviceId!);
-            } ,
-            icon: const Icon(Icons.security_rounded,color: Colors.blue,),
-          ),
-        ],
-      ),
-    );
+      ],
+    )
+  );
   }
 
   Widget buildEffect(BuildContext context,TokenController provider) {
@@ -280,7 +280,7 @@ class _HomeSreenState extends State<HomeSreen> {
 
         await tokenController.getUserToken(optionItemSelected.title, sessionToken!, deviceId!);
           if(tokenController.requestStatus){
-            startTimer(tokenController);
+           await startTimer(tokenController);
             setState(() {});
           }
         setState(() {
@@ -302,7 +302,7 @@ class _HomeSreenState extends State<HomeSreen> {
     fetchData();
   }
 
-  void startTimer(TokenController controller) {
+  Future<void> startTimer(TokenController controller) async{
     const oneSec = const Duration(seconds: 1);
     _timer = Timer.periodic(
         oneSec,
@@ -316,33 +316,34 @@ class _HomeSreenState extends State<HomeSreen> {
             }));
   }
 
-  void fetchData() {
-    isLoading = true;
-    Service().fetchData(deviceId!, 'cxvacxvcwajkcjacababajcba').then((resp) {
+  Future<void> fetchData() async {
+    setState(() {
+      shimmerEnabled = true; // Enable shimmer effect while fetching data
+    });
+
+    // Fetch data from the API
+    await Service().fetchData(deviceId!, 'cxvacxvcwajkcjacababajcba').then((resp) {
       if (resp is DataModel) {
         List<ListElement> data = resp.list;
         List<OptionItem> optionItems = [];
         for (var item in data) {
-          OptionItem optionItem =
-              OptionItem(id: item.userId, title: item.userId);
+          OptionItem optionItem = OptionItem(id: item.userId, title: item.userId);
           optionItems.add(optionItem);
         }
         dropListModel = DropListModel(optionItems);
-        isLoading = false;
-        setState(() {});
       } else if (resp is ErrorResponse) {
         Utilities.showSnackbar('Error', resp.message.toString());
-        isLoading = false;
-        setState(() {});
       } else {
         Utilities.showSnackbar('400', 'Request Failed');
-        isLoading = false;
-        setState(() {});
       }
     }).catchError((error, stackTrace) {
       Utilities.showSnackbar('Exception', error.toString());
-      isLoading = false;
-      setState(() {});
+    }).whenComplete(() {
+      // Disable shimmer effect after data is fetched (whether successful or not)
+      setState(() {
+        shimmerEnabled = false;
+        isLoading = false;
+      });
     });
   }
 

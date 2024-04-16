@@ -86,6 +86,7 @@ class Service{
           headers: header,
           body: body
       );
+      print("signup api ${response.body}\n head ${header}\n body ${body}");
       if (response.statusCode == 200) {
         Map<String, dynamic> responseVar = json.decode(response.body);
         if(responseVar['status'] == Constants.SUCCESS){

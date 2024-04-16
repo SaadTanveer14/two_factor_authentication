@@ -50,11 +50,15 @@ dependencies:
   pdf: ^3.10.8
   open_file: ^3.3.2
   connectivity_plus: ^5.0.2
+  stroke_text: ^0.0.2
+  permission_handler: ^11.3.0
+  platform_device_id_v3: ^1.0.0
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.13.1"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -67,6 +71,13 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: false
+  image_path: "assets/images/updated_logo.png"
+  min_sdk_android: 21
+
 flutter:
 
   # The following line ensures that the Material Icons font is
@@ -83,6 +94,16 @@ flutter:
     - assets/images/
     - assets/Animation/
     - assets/cert/
+
+  fonts:
+  - family: BambinoNew
+    fonts:
+      - asset: assets/fonts/BambinoNew-Regular.ttf
+        weight: 400
+      - asset: assets/fonts/BambinoNew-SemiBold.ttf
+        weight: 600
+      - asset: assets/fonts/BambinoNew-Bold.ttf
+        weight: 700
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
