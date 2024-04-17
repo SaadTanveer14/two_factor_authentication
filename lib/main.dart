@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       ],
       child: GetMaterialApp(
         navigatorKey: SignUpController.navigatorKey,
-        title: 'Flutter Demo',
+        title: '2FA',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
           useMaterial3: true,
