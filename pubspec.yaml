@@ -52,7 +52,8 @@ dependencies:
   connectivity_plus: ^5.0.2
   stroke_text: ^0.0.2
   permission_handler: ^11.3.0
-  platform_device_id_v3: ^1.0.0
+  uuid: ^4.4.2
+#  platform_device_id_v3: ^1.0.0
 
 
 dev_dependencies:

@@ -11,6 +11,14 @@ class Storage{
       return await _storage.read(key: 'token');
     }
 
+    Future<void> storeDeviceId(String deviceId) async {
+      await _storage.write(key: 'deviceId', value: deviceId,);
+    }
+
+    Future<String?> getDeviceId() async {
+      return await _storage.read(key: 'deviceId');
+    }
+
     Future<void> storeFullname(String fullname) async {
       await _storage.write(key: 'name', value: fullname,);
     }
@@ -41,7 +49,13 @@ class Storage{
 
     Future<bool> clearStorage()async{
       try{
-        await _storage.deleteAll();
+        // await _storage.deleteAll();
+        await _storage.delete(key: 'token');
+        await _storage.delete(key: 'user_id');
+        await _storage.delete(key: 'password');
+        await _storage.delete(key: 'name');
+
+
         return true;
       }catch(e){
         return false;

@@ -6,9 +6,12 @@ import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 import 'dart:io' as io;
 import 'package:flutter/services.dart';
-import 'package:platform_device_id_v3/platform_device_id.dart';
+import 'package:towfactor_ios/Utilities/Storage.dart';
+import 'package:uuid/uuid.dart';
+// import 'package:platform_device_id_v3/platform_device_id.dart';
 
 class Utilities {
+  static const uuid = Uuid();
   static void showSnackbar(String title, String message) {
     Get.snackbar(
       '',
@@ -28,8 +31,20 @@ class Utilities {
   static Future<String?> getDeviceID() async {
     String? deviceId;
     try {
-      deviceId = await PlatformDeviceId.getDeviceId;
-      // deviceId = '3867527f8fd434dl';
+      // deviceId = await PlatformDeviceId.getDeviceId;
+      if(await Storage().getDeviceId() != null)
+        {
+          deviceId = await Storage().getDeviceId();
+        }
+      else{
+        deviceId = uuid.v1();
+        await Storage().storeDeviceId(deviceId);
+      }
+      print(deviceId);
+      // ac43d9d0-5358-11ef-9894-2101993a636f
+      // deviceId = '3867527f8fd434dl';2c9f7cf0-5355-11ef-a2ef-17f10f132348
+
+
     } on PlatformException {
       deviceId = '';
       Utilities.showSnackbar(
