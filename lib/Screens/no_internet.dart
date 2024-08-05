@@ -11,12 +11,12 @@ class NoInternet extends StatelessWidget {
     ThemeData themeData = ThemeData(
       primaryColor: const Color(0xFF1349EF) /* const Color(0xFF3378F3) */,
       primaryColorDark: const Color(0xFF3378F3),
-      backgroundColor: Colors.white /* const Color(0xFF041A75) */,
+      // backgroundColor: Colors.white /* const Color(0xFF041A75) */,
       splashColor: Colors.black,/* Colors.white */
       indicatorColor: const Color(0xFF1349EF), /* Colors.white */
     );
     return Scaffold(
-      backgroundColor: themeData.backgroundColor,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Stack(
@@ -40,7 +40,7 @@ class NoInternet extends StatelessWidget {
                         fontFamily: "BambinoNew",
                         fontWeight: FontWeight.bold,
                         fontSize: 100,
-                        color: themeData.backgroundColor
+                        color: Colors.white
                       ),
                     ),
                 
