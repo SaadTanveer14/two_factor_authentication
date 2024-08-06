@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:towfactor_ios/Constants/Constants.dart';
 import 'package:towfactor_ios/Models/backup_code_model.dart';
@@ -260,4 +261,61 @@ class Service{
       throw e.toString();
     }
   }
+  
+
+  static Future<bool> getAppVersion() async {
+    var url = "https://apps.slichealth.com/ords/ihmis_admin/2FA/getAppVersion";
+    var headers = {'appVersion': '1'};
+
+    final client = await CreateHttpClint().getSSLPinningClient();
+    // final client = await SSLUtills().globalContext;
+
+    try {
+      final response = await client.get(
+        Uri.parse(url),
+        headers: headers,
+      );
+      if (response.statusCode == 200) {
+        Map<String, dynamic> responseVar = json.decode(response.body);
+          if (responseVar['http_status'] == Constants.SUCCESS) {
+            return true;
+          } else if (responseVar['http_status'] == Constants.ERROR) {
+            return false;
+          } else {
+            Utilities.showSnackbar('Alert', 'Unknown response status');
+            throw Exception('Unknown response status');
+          }
+
+      } else {
+        Utilities.showSnackbar(
+            'Response Code:-' + response.statusCode.toString(),
+            response.reasonPhrase??'Login failed');
+        throw Exception('Failed to login');
+      }
+    } 
+    on SocketException catch (e)
+    {
+      // showNoInternetSnackbar();
+      throw '${e.toString()}';
+    } 
+    on HandshakeException catch (e){
+      if (kDebugMode) {
+        print(e.toString());
+      }
+      Utilities.showSnackbar(
+          '',
+          e.toString());
+      throw Exception('Handshake with server is failed, please hold on issue will be resolved shortly');
+    }catch (e) {
+      //Utilities.showSnackbar('Exception', e.toString());
+      throw e.toString();
+    }
+    catch (e) {
+      Utilities.showSnackbar('Exception', e.toString());
+      throw e.toString();
+    }finally {
+      client.close();
+    }
+  }
+
 }
