@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
       ],
       child: GetMaterialApp(
         navigatorKey: SignUpController.navigatorKey,
+        debugShowCheckedModeBanner: false,
         title: '2FA',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
