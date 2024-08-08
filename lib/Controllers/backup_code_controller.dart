@@ -93,6 +93,9 @@ class BackupCodeController with ChangeNotifier{
           Utilities.normalMessage("The BackUp Two factors code is saved in Documents");
           OpenFile.open(file.path);
         }
+        else{
+          print('permission not given');
+        }
     }
     catch(e){
        Utilities.normalMessage(e.toString());
