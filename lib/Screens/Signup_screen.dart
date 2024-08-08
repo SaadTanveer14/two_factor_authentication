@@ -257,11 +257,20 @@ class _SignupScreenState extends State<SignupScreen> {
                       },
                       child: Align(
                         alignment: Alignment.topCenter, // Align however you like (i.e .centerRight, centerLeft)
-                        child: Text('Already have an account?login.',style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 12,
+                        child:
+                        RichText(text:
+                          TextSpan(
+                            style: TextStyle(
+                              fontSize: 12.0,
+                              color: Colors.black,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(text: 'Already have an account? '),
+                              TextSpan(text: 'login', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue)),
+                            ],
 
-                        ),),
+                          ),)
+
                       ),
                     ),
                     SizedBox(height: 15,),

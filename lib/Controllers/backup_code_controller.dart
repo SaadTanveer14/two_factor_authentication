@@ -31,8 +31,8 @@ class BackupCodeController with ChangeNotifier{
   Future<void> getBackupCodes(String userid, String token, String device_id) async{
     _isLoading = true;
     notifyListeners();
-
-    Service().getBackupCodes(device_id, userid, token).then((response) async {
+    String? userid1 = await Storage().getLoginId();
+    Service().getBackupCodes(device_id, userid1!, token).then((response) async {
       if(response is BackupCodeModel){
         _backupCodeModel = response;
         _requestStatus = true;

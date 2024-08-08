@@ -188,11 +188,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     child: Align(
                       alignment: Alignment.topCenter, // Align however you like (i.e .centerRight, centerLeft)
-                      child: Text('Dont have an account?Signup.',style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
+                      child: RichText(text:
+                      TextSpan(
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          color: Colors.black,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(text: 'Dont have an account? '),
+                          TextSpan(text: 'Signup', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue)),
+                        ],
 
-                      ),),
+                      ),)
                     ),
                   )
                 ],
